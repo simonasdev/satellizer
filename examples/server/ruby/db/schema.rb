@@ -11,7 +11,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150331192120) do
+ActiveRecord::Schema.define(version: 20160712182021) do
+
+  create_table "authorizations", force: :cascade do |t|
+    t.string   "provider"
+    t.string   "uid"
+    t.string   "token"
+    t.integer  "user_id"
+    t.string   "secret"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "authorizations", ["user_id"], name: "index_authorizations_on_user_id"
 
   create_table "users", force: :cascade do |t|
     t.string   "email",           default: "", null: false
@@ -21,6 +33,9 @@ ActiveRecord::Schema.define(version: 20150331192120) do
     t.string   "google"
     t.datetime "created_at",                   null: false
     t.datetime "updated_at",                   null: false
+    t.string   "first_name"
+    t.string   "last_name"
+    t.string   "image_url"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true

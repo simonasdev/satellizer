@@ -32,9 +32,11 @@ class AuthController < ApplicationController
   end
 
   def authenticate
-    @oauth = "Oauth::#{params['provider'].titleize}".constantize.new(params)     
+    @oauth = "Oauth::#{ params[:provider].classify }".constantize.new(params)
+
     if @oauth.authorized?
       @user = User.from_auth(@oauth.formatted_user_data, current_user)
+
       if @user
         render_success(token: Token.encode(@user.id), id: @user.id)
       else
@@ -67,7 +69,7 @@ class AuthController < ApplicationController
   end
 
   private
-  
+
     def twitter_oauth
       @oauth ||= Oauth::Twitter.new(params)
     end

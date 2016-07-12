@@ -49,10 +49,10 @@ class User < ActiveRecord::Base
     user.last_name     ||= (params[:last_name]  || fallback_last_name)
 
     if user.image_url.blank?
-      user.image = Image.new(name: user.full_name, remote_file_url: params[:image_url])
+      user.image_url = params[:image_url]
     end
 
-    user.password = Devise.friendly_token[0,10] if user.encrypted_password.blank?
+    user.password = SecureRandom.hex if user.password_digest.blank?
 
     if user.email.blank?
       user.save(validate: false)
@@ -67,5 +67,9 @@ class User < ActiveRecord::Base
 
   def displayName= name
     self.display_name = name
+  end
+
+  def full_name
+    "#{ first_name } #{ last_name }"
   end
 end
